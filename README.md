@@ -2,7 +2,7 @@
 
 ## Use Python to download today or yesterday [Pixivision](https://www.pixivision.net/en/c/illustration) daily recommended illustration collection
 
-## Before you run this program you need to install Python 3.X and these modules
+## Before you run this program you need to install Python 3.x and these modules
 
 1. BeautifulSoup4
 
