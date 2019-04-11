@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+import datetime
+import os
+import time
+
+import requests
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
-import requests
-import datetime
-import time
-import os
 
 
 def GetFakeHeader(ref):
@@ -32,12 +33,12 @@ cookie = {
 url = 'https://www.pixivision.net/zh/c/illustration'  # 这是Page1,下一页为*/?p=2
 
 #td = time.strftime('%Y.%m.%d',time.localtime(time.time()))
-td = datetime.datetime.now().strftime('%Y.%m.%d')
-yd = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime('%Y.%m.%d')
+td = datetime.datetime.now().strftime('%Y.%m.%d')   #Get today
+yd = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime('%Y.%m.%d')    #Get Yesterday
 hreflist, titlelist = [], []
 td_push_count, yd_push_count = 0, 0
 
-soup = BeautifulSoup(GetCode(url , GetFakeHeader(''), cookie), 'lxml')
+soup = BeautifulSoup(GetCode(url, GetFakeHeader(''), cookie), 'lxml')
 for a, ptime in zip(soup.find_all(name='a', attrs={'data-gtm-action': 'ClickTitle'}, limit=20), soup.find_all('time')):
     href = 'https://www.pixivision.net' + a.get('href')
     title = a.get_text()
@@ -50,7 +51,8 @@ if td_push_count:
     for c in range(0, td_push_count):
         print(hreflist[c])
         print(titlelist[c])
-        soup = BeautifulSoup(GetCode(hreflist[c], GetFakeHeader(''), cookie), 'lxml')
+        soup = BeautifulSoup(
+            GetCode(hreflist[c], GetFakeHeader(''), cookie), 'lxml')
         folderpath = os.getcwd() + '\\' + titlelist[c] + '\\'
         is_exist = os.path.exists(folderpath)
         if not is_exist:
@@ -59,10 +61,12 @@ if td_push_count:
             illustsrc = img.attrs['src'].replace(
                 'https://i.pximg.net/c/768x1200_80/img-master/', 'https://i.pximg.net/img-original/')
             illustsrc = illustsrc.replace('_master1200.jpg', '.jpg')
-            r = requests.get(illustsrc, headers=GetFakeHeader(url), cookies = cookie)
+            r = requests.get(
+                illustsrc, headers=GetFakeHeader(url), cookies=cookie)
             if r.status_code == 404:
                 illustsrc = illustsrc.replace('.jpg', '.png')
-                r = requests.get(illustsrc, headers=GetFakeHeader(url), cookies = cookie)
+                r = requests.get(
+                    illustsrc, headers=GetFakeHeader(url), cookies=cookie)
             print(illustsrc)
             with open(folderpath + os.path.basename(illustsrc), 'wb') as f:
                 f.write(r.content)
@@ -84,10 +88,12 @@ else:
                 illustsrc = img.attrs['src'].replace(
                     'https://i.pximg.net/c/768x1200_80/img-master/', 'https://i.pximg.net/img-original/')
                 illustsrc = illustsrc.replace('_master1200.jpg', '.jpg')
-                r = requests.get(illustsrc, headers=GetFakeHeader(url), cookies = cookie)
+                r = requests.get(
+                    illustsrc, headers=GetFakeHeader(url), cookies=cookie)
                 if r.status_code == 404:
                     illustsrc = illustsrc.replace('.jpg', '.png')
-                    r = requests.get(illustsrc, headers=GetFakeHeader(url), cookies = cookie)
+                    r = requests.get(
+                        illustsrc, headers=GetFakeHeader(url), cookies=cookie)
                 print(illustsrc)
                 with open(folderpath + os.path.basename(illustsrc), 'wb') as f:
                     f.write(r.content)
