@@ -23,3 +23,5 @@ You can use pip to install these modules
  `url = 'https://www.pixivision.net/en/c/illustration'` This is English Ver
 
  `url = 'https://www.pixivision.net/ja/c/illustration'` This is Japanese Ver
+
+5. This program will rebuild soon
